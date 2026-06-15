@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SVG Motors — Sales Pro Playbook</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+
+  /* PASSWORD GATE */
+  #gate { position: fixed; inset: 0; background: #111; display: flex; align-items: center; justify-content: center; z-index: 9999; }
+  #gate.hidden { display: none; }
+  .gate-box { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 2.5rem; width: 340px; text-align: center; }
+  .gate-logo { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .gate-sub { font-size: 13px; color: #888; margin-bottom: 1.75rem; }
+  .gate-box input { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #333; background: #111; color: #fff; font-size: 14px; margin-bottom: 10px; outline: none; }
+  .gate-box input:focus { border-color: #1D9E75; }
+  .gate-box button { width: 100%; padding: 10px; border-radius: 8px; border: none; background: #1D9E75; color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .gate-box button:hover { background: #0F6E56; }
+  .gate-err { font-size: 12px; color: #e24b4a; margin-top: 8px; min-height: 18px; }
+
+  /* HEADER */
+  .header { background: #111; color: #fff; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .header-logo { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+  .header-sub { font-size: 12px; color: #888; margin-top: 1px; }
+
+  /* TABS */
+  .tab-bar { background: #fff; border-bottom: 1px solid #e5e5e5; display: flex; overflow-x: auto; padding: 0 24px; position: sticky; top: 57px; z-index: 99; }
+  .tab-btn { padding: 14px 18px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; color: #666; border-bottom: 2px solid transparent; white-space: nowrap; }
+  .tab-btn.active { color: #1D9E75; border-bottom-color: #1D9E75; }
+  .tab-btn:hover:not(.active) { color: #1a1a1a; }
+
+  /* CONTENT */
+  .content { max-width: 900px; margin: 0 auto; padding: 28px 24px; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* GRID */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: .75rem 0 1rem; }
+  @media(max-width: 600px) { .two-col, .three-col, .four-col { grid-template-columns: 1fr 1fr; } }
+
+  /* CARDS */
+  .card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem 1.25rem; }
+  .card.highlight { border: 2px solid #1D9E75; }
+  .metric-card { background: #f5f5f5; border-radius: 8px; padding: .875rem 1rem; }
+  .metric-label { font-size: 11px; color: #888; margin-bottom: 4px; }
+  .metric-value { font-size: 22px; font-weight: 600; color: #1a1a1a; }
+  .metric-value.green { color: #1D9E75; }
+  .metric-value.blue { color: #185FA5; }
+  .metric-value.amber { color: #BA7517; }
+
+  /* TYPOGRAPHY */
+  .section-label { font-size: 11px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: .07em; margin: 1.5rem 0 .75rem; }
+  .card-head { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: #666; margin-bottom: .875rem; line-height: 1.5; }
+
+  /* STAT ROWS */
+  .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: #666; }
+  .stat-val { font-weight: 600; }
+  .stat-val.green { color: #1D9E75; }
+  .stat-val.amber { color: #BA7517; }
+
+  /* BADGES */
+  .pro-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; margin-bottom: 8px; }
+  .pro-badge.pro { background: #E1F5EE; color: #085041; }
+  .pro-badge.am { background: #FAEEDA; color: #633806; }
+
+  /* FLYWHEEL */
+  .flywheel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin: .75rem 0 1.25rem; align-items: center; }
+  .fw-step { text-align: center; padding: 10px 4px; }
+  .fw-icon { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 18px; }
+  .fw-icon.teal { background: #E1F5EE; color: #0F6E56; }
+  .fw-icon.blue { background: #E6F1FB; color: #185FA5; }
+  .fw-icon.amber { background: #FAEEDA; color: #854F0B; }
+  .fw-icon.green { background: #EAF3DE; color: #3B6D11; }
+  .fw-icon.purple { background: #EEEDFE; color: #534AB7; }
+  .fw-label { font-size: 11px; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+  .fw-sub { font-size: 10px; color: #888; margin-top: 2px; }
+  .fw-arrow { text-align: center; font-size: 18px; color: #ccc; }
+
+  /* CADENCE */
+  .year-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: .75rem 0 1.25rem; }
+  .year-cell { background: #f5f5f5; border-radius: 8px; padding: 10px 12px; }
+  .yc-label { font-size: 11px; color: #888; margin-bottom: 3px; }
+  .yc-val { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+
+  /* ORPHAN BOXES */
+  .orphan-box { border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+  .o-head { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .o-body { font-size: 12px; color: #666; line-height: 1.6; }
+
+  /* INPUTS */
+  .input-row { display: flex; align-items: center; gap: 12px; margin-bottom: .9rem; }
+  .input-label { font-size: 13px; color: #666; width: 200px; flex-shrink: 0; }
+  .input-row input[type=range] { flex: 1; accent-color: #1D9E75; }
+  .input-val { font-size: 13px; font-weight: 600; min-width: 54px; text-align: right; color: #1a1a1a; }
+
+  /* BRIDGE CALLOUT */
+  .bridge-callout { background: #E1F5EE; border-radius: 8px; padding: 12px 16px; margin: 1rem 0; }
+  .bridge-callout p { font-size: 13px; color: #085041; line-height: 1.6; }
+  .bridge-callout strong { color: #04342C; }
+
+  /* NUDGE */
+  .nudge { font-size: 12px; color: #666; padding: 10px 14px; background: #f5f5f5; border-radius: 8px; line-height: 1.6; margin-top: .75rem; }
+
+  /* LINE ROWS (breakdown) */
+  .line-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid #f0f0f0; color: #666; }
+  .line-row span:last-child { color: #1a1a1a; font-weight: 600; }
+
+  /* COMPARE */
+  .compare-big { font-size: 28px; font-weight: 700; margin: 4px 0 0; }
+  .compare-big.blue { color: #185FA5; }
+  .compare-big.green { color: #1D9E75; }
+  .compare-head { font-size: 12px; color: #888; }
+
+  /* TIER ROWS */
+  .tier-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; }
+  .tier-label { font-size: 13px; }
+  .tier-bonus { font-size: 15px; font-weight: 700; }
+  .tier-active { background: #E1F5EE; }
+  .tier-active .tier-label { color: #085041; }
+  .tier-active .tier-bonus { color: #0F6E56; }
+  .tier-locked { background: #f5f5f5; }
+  .tier-locked .tier-label { color: #888; }
+  .tier-locked .tier-bonus { color: #bbb; }
+  .tier-next { border: 1.5px solid #9FE1CB; background: #fff; }
+  .tier-next .tier-label { color: #1a1a1a; }
+  .tier-next .tier-bonus { color: #1D9E75; }
+  .progress-bar-wrap { background: #e5e5e5; border-radius: 4px; height: 5px; margin: 5px 0 2px; }
+  .progress-bar { height: 5px; border-radius: 4px; background: #1D9E75; }
+
+  .divider { border: none; border-top: 1px solid #f0f0f0; margin: 1.25rem 0; }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">SVG Motors</div>
+    <div class="gate-sub">Sales Pro Playbook — Team Access</div>
+    <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()">
+    <button onclick="checkPw()">Enter</button>
+    <div class="gate-err" id="pw-err"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-logo">SVG Motors — Sales Pro Playbook</div>
+    <div class="header-sub">Everything starts with logging the visit in SpaceAuto</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('mindset',this)">Pro mindset</button>
+  <button class="tab-btn" onclick="switchTab('activity',this)">Activity simulator</button>
+  <button class="tab-btn" onclick="switchTab('compare',this)">You are vs could be</button>
+  <button class="tab-btn" onclick="switchTab('goal',this)">Income goal</button>
+  <button class="tab-btn" onclick="switchTab('bonus',this)">Quarterly bonus</button>
+</div>
+
+<div class="content">
+
+  <!-- TAB 1: PRO MINDSET -->
+  <div id="tab-mindset" class="tab-pane active">
+    <div class="two-col">
+      <div class="card">
+        <div class="pro-badge am">Amateur</div>
+        <p class="card-head">Waiting for fresh ups</p>
+        <p class="card-sub">Dependent on weather, traffic, and chance. Standing on the lot hoping someone walks in.</p>
+        <div class="stat-row"><span class="stat-label">Cold call → appointment</span><span class="stat-val amber">2–3%</span></div>
+        <div class="stat-row"><span class="stat-label">Deal conflict</span><span class="stat-val amber">High</span></div>
+        <div class="stat-row"><span class="stat-label">VSC resistance</span><span class="stat-val amber">High</span></div>
+        <div class="stat-row"><span class="stat-label">Trade-in resistance</span><span class="stat-val amber">High</span></div>
+        <div class="stat-row"><span class="stat-label">Referrals generated</span><span class="stat-val amber">Few</span></div>
+        <div class="stat-row"><span class="stat-label">Income ceiling</span><span class="stat-val amber">Low &amp; unpredictable</span></div>
+      </div>
+      <div class="card highlight">
+        <div class="pro-badge pro">Professional</div>
+        <p class="card-head">Working repeat &amp; referral</p>
+        <p class="card-sub">Proactively builds a book. Every customer is a long-term relationship and a source of future deals.</p>
+        <div class="stat-row"><span class="stat-label">Repeat/referral → appointment</span><span class="stat-val green">10–15%</span></div>
+        <div class="stat-row"><span class="stat-label">Deal conflict</span><span class="stat-val green">Low</span></div>
+        <div class="stat-row"><span class="stat-label">VSC resistance</span><span class="stat-val green">Low</span></div>
+        <div class="stat-row"><span class="stat-label">Trade-in resistance</span><span class="stat-val green">Low</span></div>
+        <div class="stat-row"><span class="stat-label">Referrals generated</span><span class="stat-val green">Consistent</span></div>
+        <div class="stat-row"><span class="stat-label">Income ceiling</span><span class="stat-val green">High &amp; compounding</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">The flywheel — it starts with logging the visit</div>
+    <div class="flywheel">
+      <div class="fw-step"><div class="fw-icon teal"><i class="ti ti-device-mobile"></i></div><div class="fw-label">Log the visit</div><div class="fw-sub">Every contact in SpaceAuto</div></div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-step"><div class="fw-icon blue"><i class="ti ti-phone-call"></i></div><div class="fw-label">Stay in contact</div><div class="fw-sub">No ask. Just presence.</div></div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-step"><div class="fw-icon amber"><i class="ti ti-heart"></i></div><div class="fw-label">Build trust</div><div class="fw-sub">Birthdays, check-ins, service</div></div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-step"><div class="fw-icon green"><i class="ti ti-users"></i></div><div class="fw-label">Earn referrals</div><div class="fw-sub">They send their people</div></div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-step"><div class="fw-icon purple"><i class="ti ti-repeat"></i></div><div class="fw-label">Repeat business</div><div class="fw-sub">Faster deals, less friction</div></div>
+    </div>
+
+    <div class="section-label">Stay-in-contact cadence</div>
+    <div class="year-grid">
+      <div class="year-cell"><div class="yc-label">Year 1 — quarterly</div><div class="yc-val">4 touches</div></div>
+      <div class="year-cell"><div class="yc-label">Year 2+ — every 6 mo</div><div class="yc-val">2 touches / yr</div></div>
+      <div class="year-cell"><div class="yc-label">Birthday call</div><div class="yc-val">Every year</div></div>
+      <div class="year-cell"><div class="yc-label">The rule</div><div class="yc-val">No ask. Just check in.</div></div>
+    </div>
+
+    <div class="section-label">Starting out — orphan customers are your fastest path</div>
+    <div class="orphan-box">
+      <div class="o-head"><i class="ti ti-tools" style="font-size:13px;vertical-align:-1px;margin-right:6px;"></i>Service reminder call</div>
+      <div class="o-body">"I've taken over for [name] who's no longer here. You've had your car about six months — it's time for an oil change. I can schedule it, pick your car up, leave you a loaner, and drop it back to you at the end of the day. Can I set that up for you?"</div>
+    </div>
+    <div class="orphan-box">
+      <div class="o-head"><i class="ti ti-brand-facebook" style="font-size:13px;vertical-align:-1px;margin-right:6px;"></i>Social media — daily, not weekly</div>
+      <div class="o-body">Not just deals. "Did you know?" posts. Tips. Local content. Multiple times a day. Become the person this market thinks of when they think cars.</div>
+    </div>
+    <div class="orphan-box">
+      <div class="o-head"><i class="ti ti-database" style="font-size:13px;vertical-align:-1px;margin-right:6px;"></i>Use what's already in SpaceAuto</div>
+      <div class="o-body">You already know their vehicle, payment, rate, and mileage. A call with those details isn't a cold call — it's a consultation. Use it.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: ACTIVITY SIMULATOR -->
+  <div id="tab-activity" class="tab-pane">
+    <div class="input-row"><span class="input-label">Cold calls per day</span><input type="range" id="s_cold" min="0" max="30" value="10" step="1" oninput="sim()"><span class="input-val" id="s_cold_v">10</span></div>
+    <div class="input-row"><span class="input-label">Repeat/referral calls per day</span><input type="range" id="s_warm" min="0" max="20" value="3" step="1" oninput="sim()"><span class="input-val" id="s_warm_v">3</span></div>
+    <div class="input-row"><span class="input-label">Working days per month</span><input type="range" id="s_days" min="15" max="26" value="22" step="1" oninput="sim()"><span class="input-val" id="s_days_v">22</span></div>
+    <div class="four-col">
+      <div class="metric-card"><p class="metric-label">Appts from cold / mo</p><p class="metric-value amber" id="r_cold_appt">—</p></div>
+      <div class="metric-card"><p class="metric-label">Appts from repeat / mo</p><p class="metric-value green" id="r_warm_appt">—</p></div>
+      <div class="metric-card"><p class="metric-label">Total visits to log</p><p class="metric-value" id="r_total_visits">—</p></div>
+      <div class="metric-card"><p class="metric-label">Projected units / mo</p><p class="metric-value green" id="r_units">—</p></div>
+    </div>
+    <div class="bridge-callout"><p id="sim_bridge"></p></div>
+    <p class="nudge" id="sim_nudge"></p>
+    <div class="section-label">What consistent contact builds over time</div>
+    <div class="four-col">
+      <div class="metric-card"><p class="metric-label">Customers in your book (3 yrs)</p><p class="metric-value" id="yr_customers">—</p></div>
+      <div class="metric-card"><p class="metric-label">Repeat appts / mo (yr 3+)</p><p class="metric-value green" id="yr_warm">—</p></div>
+      <div class="metric-card"><p class="metric-label">Units from repeat alone</p><p class="metric-value green" id="yr_units">—</p></div>
+      <div class="metric-card"><p class="metric-label">Est. income from repeat</p><p class="metric-value green" id="yr_income">—</p></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: YOU ARE VS COULD BE -->
+  <div id="tab-compare" class="tab-pane">
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <div class="section-label">Where you are now</div>
+        <div class="input-row"><span class="input-label">Monthly visits logged</span><input type="range" id="c_visits" min="0" max="150" value="25" step="1" oninput="calc()"><span class="input-val" id="c_visits_v">25</span></div>
+        <div class="input-row"><span class="input-label">Close rate</span><input type="range" id="c_close" min="5" max="60" value="30" step="1" oninput="calc()"><span class="input-val" id="c_close_v">30%</span></div>
+        <div class="input-row"><span class="input-label">VSC penetration %</span><input type="range" id="c_vsc" min="0" max="80" value="30" step="1" oninput="calc()"><span class="input-val" id="c_vsc_v">30%</span></div>
+        <div class="input-row"><span class="input-label">GAP penetration %</span><input type="range" id="c_gap" min="0" max="80" value="40" step="1" oninput="calc()"><span class="input-val" id="c_gap_v">40%</span></div>
+        <div class="input-row"><span class="input-label">Ancillary per deal</span><input type="range" id="c_anc" min="0" max="3" value="0" step="1" oninput="calc()"><span class="input-val" id="c_anc_v">0</span></div>
+        <div class="input-row"><span class="input-label">Street purchases / mo</span><input type="range" id="c_street" min="0" max="10" value="0" step="1" oninput="calc()"><span class="input-val" id="c_street_v">0</span></div>
+        <div class="input-row"><span class="input-label">Ziebart per deal</span><input type="range" id="c_zb" min="0" max="3" value="0" step="1" oninput="calc()"><span class="input-val" id="c_zb_v">0</span></div>
+      </div>
+      <div>
+        <div class="section-label">Where you could be</div>
+        <div class="input-row"><span class="input-label">Monthly visits logged</span><input type="range" id="p_visits" min="0" max="150" value="60" step="1" oninput="calc()"><span class="input-val" id="p_visits_v">60</span></div>
+        <div class="input-row"><span class="input-label">Close rate</span><input type="range" id="p_close" min="5" max="60" value="30" step="1" oninput="calc()"><span class="input-val" id="p_close_v">30%</span></div>
+        <div class="input-row"><span class="input-label">VSC penetration %</span><input type="range" id="p_vsc" min="0" max="80" value="45" step="1" oninput="calc()"><span class="input-val" id="p_vsc_v">45%</span></div>
+        <div class="input-row"><span class="input-label">GAP penetration %</span><input type="range" id="p_gap" min="0" max="80" value="55" step="1" oninput="calc()"><span class="input-val" id="p_gap_v">55%</span></div>
+        <div class="input-row"><span class="input-label">Ancillary per deal</span><input type="range" id="p_anc" min="0" max="3" value="1" step="1" oninput="calc()"><span class="input-val" id="p_anc_v">1</span></div>
+        <div class="input-row"><span class="input-label">Street purchases / mo</span><input type="range" id="p_street" min="0" max="10" value="2" step="1" oninput="calc()"><span class="input-val" id="p_street_v">2</span></div>
+        <div class="input-row"><span class="input-label">Ziebart per deal</span><input type="range" id="p_zb" min="0" max="3" value="1" step="1" oninput="calc()"><span class="input-val" id="p_zb_v">1</span></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="two-col" style="text-align:center;margin-bottom:1rem;">
+      <div><p class="compare-head">Monthly income (you are)</p><p class="compare-big blue" id="c_total">—</p></div>
+      <div><p class="compare-head">Monthly income (could be)</p><p class="compare-big green" id="p_total">—</p></div>
+    </div>
+    <div class="two-col">
+      <div id="c_breakdown"></div>
+      <div id="p_breakdown"></div>
+    </div>
+    <p class="nudge" id="compare_nudge"></p>
+  </div>
+
+  <!-- TAB 4: INCOME GOAL -->
+  <div id="tab-goal" class="tab-pane">
+    <div class="input-row"><span class="input-label">Monthly income goal</span><input type="range" id="g_goal" min="2000" max="15000" value="6000" step="100" oninput="goalCalc()"><span class="input-val" id="g_goal_v">$6,000</span></div>
+    <div class="input-row"><span class="input-label">Close rate</span><input type="range" id="g_close" min="5" max="60" value="30" step="1" oninput="goalCalc()"><span class="input-val" id="g_close_v">30%</span></div>
+    <div class="input-row"><span class="input-label">VSC penetration %</span><input type="range" id="g_vsc" min="0" max="80" value="40" step="1" oninput="goalCalc()"><span class="input-val" id="g_vsc_v">40%</span></div>
+    <div class="input-row"><span class="input-label">GAP penetration %</span><input type="range" id="g_gap" min="0" max="80" value="50" step="1" oninput="goalCalc()"><span class="input-val" id="g_gap_v">50%</span></div>
+    <div class="input-row"><span class="input-label">Ancillary per deal</span><input type="range" id="g_anc" min="0" max="3" value="1" step="1" oninput="goalCalc()"><span class="input-val" id="g_anc_v">1</span></div>
+    <div class="input-row"><span class="input-label">Street purchases / mo</span><input type="range" id="g_street" min="0" max="10" value="1" step="1" oninput="goalCalc()"><span class="input-val" id="g_street_v">1</span></div>
+    <div class="input-row"><span class="input-label">Ziebart per deal</span><input type="range" id="g_zb" min="0" max="3" value="1" step="1" oninput="goalCalc()"><span class="input-val" id="g_zb_v">1</span></div>
+    <div class="divider"></div>
+    <div class="three-col">
+      <div class="metric-card"><p class="metric-label">Visits needed / month</p><p class="metric-value" id="g_visits">—</p></div>
+      <div class="metric-card"><p class="metric-label">Units that produces</p><p class="metric-value" id="g_units">—</p></div>
+      <div class="metric-card"><p class="metric-label">Visits needed / week</p><p class="metric-value green" id="g_visits_wk">—</p></div>
+    </div>
+    <p class="nudge" id="goal_nudge"></p>
+  </div>
+
+  <!-- TAB 5: QUARTERLY BONUS -->
+  <div id="tab-bonus" class="tab-pane">
+    <div class="input-row"><span class="input-label">Units sold this quarter</span><input type="range" id="q_units" min="0" max="80" value="20" step="1" oninput="bonusCalc()"><span class="input-val" id="q_units_v">20</span></div>
+    <div class="input-row"><span class="input-label">VSC penetration %</span><input type="range" id="q_vsc" min="0" max="80" value="28" step="1" oninput="bonusCalc()"><span class="input-val" id="q_vsc_v">28%</span></div>
+    <div class="input-row"><span class="input-label">Months remaining in qtr</span><input type="range" id="q_months" min="0" max="2" value="1" step="1" oninput="bonusCalc()"><span class="input-val" id="q_months_v">1</span></div>
+    <div class="input-row"><span class="input-label">Projected units / mo left</span><input type="range" id="q_proj" min="0" max="25" value="8" step="1" oninput="bonusCalc()"><span class="input-val" id="q_proj_v">8</span></div>
+    <div class="divider"></div>
+    <div id="tier_rows"></div>
+    <div class="metric-card" style="margin-top:.75rem;">
+      <p class="metric-label">Projected quarterly bonus</p>
+      <p class="metric-value green" id="q_bonus_out">—</p>
+    </div>
+    <p class="nudge" id="bonus_nudge"></p>
+  </div>
+
+</div>
+
+<script>
+const PASSWORD = 'svgpro2026';
+
+function checkPw(){
+  const val = document.getElementById('pw-input').value;
+  if(val === PASSWORD){
+    document.getElementById('gate').classList.add('hidden');
+    sim(); calc(); goalCalc(); bonusCalc();
+  } else {
+    document.getElementById('pw-err').textContent = 'Incorrect password. Try again.';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+function fmt(n){ return '$' + Math.round(n).toLocaleString(); }
+
+function switchTab(name, btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function sim(){
+  const cold=+document.getElementById('s_cold').value, warm=+document.getElementById('s_warm').value, days=+document.getElementById('s_days').value;
+  document.getElementById('s_cold_v').textContent=cold; document.getElementById('s_warm_v').textContent=warm; document.getElementById('s_days_v').textContent=days;
+  const coldAppt=Math.round(cold*days*0.025), warmAppt=Math.round(warm*days*0.125), total=coldAppt+warmAppt, units=Math.round(total*0.30);
+  document.getElementById('r_cold_appt').textContent=coldAppt;
+  document.getElementById('r_warm_appt').textContent=warmAppt;
+  document.getElementById('r_total_visits').textContent=total;
+  document.getElementById('r_units').textContent=units;
+  const pct=total>0?Math.round((warmAppt/total)*100):0;
+  document.getElementById('sim_bridge').innerHTML='<strong>What this means for your paycheck:</strong> These '+total+' logged visits → '+units+' units → '+fmt(units*250)+' in unit pay alone. Every visit logged today is a step in the flywheel. Quarterly Tier 1 bonus triggers at 27 units — you\'re '+Math.max(0,27-units)+' away.';
+  document.getElementById('sim_nudge').textContent='Your repeat/referral calls ('+warm+'/day) generate '+pct+'% of your appointments with 5x less effort per appointment than cold calls. Every customer you stay in contact with compounds this number.';
+  const custBook=Math.round(units*12*3);
+  const yr3appt=Math.max(Math.round(warm*days*0.125*1.5), Math.round(custBook*0.002));
+  const yr3units=Math.round(yr3appt*0.30);
+  const yr3income=yr3units*250+Math.round(yr3units*0.40)*100+Math.round(yr3units*0.50)*50;
+  document.getElementById('yr_customers').textContent=custBook.toLocaleString();
+  document.getElementById('yr_warm').textContent=yr3appt;
+  document.getElementById('yr_units').textContent=yr3units;
+  document.getElementById('yr_income').textContent=fmt(yr3income);
+}
+
+function incomeFrom(visits,close,vsc,gap,anc,street,zb){
+  const units=Math.round(visits*(close/100));
+  const visitPay=visits*25, unitPay=units*250, vscPay=Math.round(units*(vsc/100))*100, gapPay=Math.round(units*(gap/100))*50, ancPay=Math.round(units*anc)*20, streetPay=street*200, zbPay=Math.round(units*zb)*100;
+  return {units,visitPay,unitPay,vscPay,gapPay,ancPay,streetPay,zbPay,total:visitPay+unitPay+vscPay+gapPay+ancPay+streetPay+zbPay};
+}
+
+function bkdn(d,visits){
+  return '<div class="line-row"><span>Visits logged ('+visits+')</span><span>'+fmt(d.visitPay)+'</span></div>'
+    +'<div class="line-row"><span>Units sold ('+d.units+')</span><span>'+fmt(d.unitPay)+'</span></div>'
+    +'<div class="line-row"><span>VSC</span><span>'+fmt(d.vscPay)+'</span></div>'
+    +'<div class="line-row"><span>GAP</span><span>'+fmt(d.gapPay)+'</span></div>'
+    +'<div class="line-row"><span>Ancillary</span><span>'+fmt(d.ancPay)+'</span></div>'
+    +'<div class="line-row"><span>Street purchases</span><span>'+fmt(d.streetPay)+'</span></div>'
+    +'<div class="line-row"><span>Ziebart</span><span>'+fmt(d.zbPay)+'</span></div>';
+}
+
+function calc(){
+  const cv=+document.getElementById('c_visits').value,cc=+document.getElementById('c_close').value,cv2=+document.getElementById('c_vsc').value,cg=+document.getElementById('c_gap').value,ca=+document.getElementById('c_anc').value,cs=+document.getElementById('c_street').value,czb=+document.getElementById('c_zb').value;
+  const pv=+document.getElementById('p_visits').value,pc=+document.getElementById('p_close').value,pv2=+document.getElementById('p_vsc').value,pg=+document.getElementById('p_gap').value,pa=+document.getElementById('p_anc').value,ps=+document.getElementById('p_street').value,pzb=+document.getElementById('p_zb').value;
+  document.getElementById('c_visits_v').textContent=cv; document.getElementById('c_close_v').textContent=cc+'%'; document.getElementById('c_vsc_v').textContent=cv2+'%'; document.getElementById('c_gap_v').textContent=cg+'%'; document.getElementById('c_anc_v').textContent=ca; document.getElementById('c_street_v').textContent=cs; document.getElementById('c_zb_v').textContent=czb;
+  document.getElementById('p_visits_v').textContent=pv; document.getElementById('p_close_v').textContent=pc+'%'; document.getElementById('p_vsc_v').textContent=pv2+'%'; document.getElementById('p_gap_v').textContent=pg+'%'; document.getElementById('p_anc_v').textContent=pa; document.getElementById('p_street_v').textContent=ps; document.getElementById('p_zb_v').textContent=pzb;
+  const cur=incomeFrom(cv,cc,cv2,cg,ca,cs,czb), pot=incomeFrom(pv,pc,pv2,pg,pa,ps,pzb);
+  document.getElementById('c_total').textContent=fmt(cur.total);
+  document.getElementById('p_total').textContent=fmt(pot.total);
+  document.getElementById('c_breakdown').innerHTML=bkdn(cur,cv);
+  document.getElementById('p_breakdown').innerHTML=bkdn(pot,pv);
+  const diff=pot.total-cur.total;
+  document.getElementById('compare_nudge').textContent=diff>0?'Logging '+(pv-cv)+' more visits per month — about '+Math.round((pv-cv)/4.3)+' extra per week — could mean an additional '+fmt(diff)+'/month or '+fmt(diff*12)+'/year.':'Adjust the sliders to see what changing your habits could mean for your income.';
+}
+
+function goalCalc(){
+  const goal=+document.getElementById('g_goal').value,close=+document.getElementById('g_close').value,vsc=+document.getElementById('g_vsc').value,gap=+document.getElementById('g_gap').value,anc=+document.getElementById('g_anc').value,street=+document.getElementById('g_street').value,zb=+document.getElementById('g_zb').value;
+  document.getElementById('g_goal_v').textContent=fmt(goal); document.getElementById('g_close_v').textContent=close+'%'; document.getElementById('g_vsc_v').textContent=vsc+'%'; document.getElementById('g_gap_v').textContent=gap+'%'; document.getElementById('g_anc_v').textContent=anc; document.getElementById('g_street_v').textContent=street; document.getElementById('g_zb_v').textContent=zb;
+  const perVisit=25+((close/100)*(250+(vsc/100)*100+(gap/100)*50+anc*20+zb*100));
+  const visitsNeeded=Math.ceil((goal-street*200)/perVisit);
+  const units=Math.round(visitsNeeded*(close/100));
+  document.getElementById('g_visits').textContent=visitsNeeded;
+  document.getElementById('g_units').textContent=units;
+  document.getElementById('g_visits_wk').textContent=Math.ceil(visitsNeeded/4.3);
+  document.getElementById('goal_nudge').textContent='At a '+close+'% close rate, '+visitsNeeded+' logged visits produces ~'+units+' units and '+fmt(goal)+'/month. That\'s '+Math.ceil(visitsNeeded/4.3)+' visits per week — all starting in SpaceAuto.';
+}
+
+function bonusCalc(){
+  const units=+document.getElementById('q_units').value,vsc=+document.getElementById('q_vsc').value,months=+document.getElementById('q_months').value,proj=+document.getElementById('q_proj').value;
+  document.getElementById('q_units_v').textContent=units; document.getElementById('q_vsc_v').textContent=vsc+'%'; document.getElementById('q_months_v').textContent=months; document.getElementById('q_proj_v').textContent=proj;
+  const projUnits=units+(months*proj);
+  const tiers=[{label:'Tier 1: 27–38 units + 30%+ VSC',unitMin:27,vscMin:30,bonus:100},{label:'Tier 2: 39–53 units + 40%+ VSC',unitMin:39,vscMin:40,bonus:200},{label:'Tier 3: 54+ units + 50%+ VSC',unitMin:54,vscMin:50,bonus:300}];
+  let earnedBonus=0,earnedTier=null;
+  tiers.forEach(t=>{ if(projUnits>=t.unitMin&&vsc>=t.vscMin){earnedBonus=t.bonus;earnedTier=t;} });
+  let html='';
+  tiers.forEach(t=>{
+    const unitMet=projUnits>=t.unitMin,vscMet=vsc>=t.vscMin,earned=unitMet&&vscMet;
+    const isNext=!earned&&!earnedTier;
+    const cls=earned?'tier-active':isNext?'tier-next':'tier-locked';
+    const uLeft=Math.max(0,t.unitMin-projUnits),vLeft=Math.max(0,t.vscMin-vsc);
+    const uPct=Math.min(100,Math.round((projUnits/t.unitMin)*100));
+    html+='<div class="tier-row '+cls+'"><div class="tier-label"><div style="font-weight:600;margin-bottom:3px;">'+t.label+'</div>';
+    if(earned){ html+='<div style="font-size:12px;color:#0F6E56;">Qualified — bonus applies to all '+projUnits+' projected units</div>'; }
+    else {
+      html+='<div style="font-size:12px;color:#888;">';
+      if(!unitMet) html+=uLeft+' more unit'+(uLeft!==1?'s':'')+' needed';
+      if(!unitMet&&!vscMet) html+=' · ';
+      if(!vscMet) html+='VSC '+vLeft+'% short';
+      html+='</div>';
+      if(!unitMet){ html+='<div class="progress-bar-wrap"><div class="progress-bar" style="width:'+uPct+'%"></div></div><div style="font-size:11px;color:#aaa;">'+projUnits+' of '+t.unitMin+' units</div>'; }
+    }
+    html+='</div><div class="tier-bonus">'+fmt(t.bonus*projUnits)+'</div></div>';
+  });
+  document.getElementById('tier_rows').innerHTML=html;
+  document.getElementById('q_bonus_out').textContent=earnedBonus>0?fmt(earnedBonus*projUnits):'$0';
+  const nudge=earnedBonus>0?'On track for Tier '+(earnedBonus===100?1:earnedBonus===200?2:3)+' — '+fmt(earnedBonus*projUnits)+' retroactive bonus on all '+projUnits+' units. No other dealership in this market pays this.':projUnits<27?Math.max(0,27-projUnits)+' more units + 30%+ VSC penetration unlocks a '+fmt(100*Math.max(projUnits,27))+'+ quarterly bonus.':'Increase your VSC penetration to 30%+ to unlock Tier 1.';
+  document.getElementById('bonus_nudge').textContent=nudge;
+}
+</script>
+</body>
+</html>
