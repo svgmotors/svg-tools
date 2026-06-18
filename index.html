@@ -61,9 +61,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
 .sc-tile{background:#0a1413;padding:11px 13px;position:relative;}
 .sc-tile .tile-rank{font-family:var(--hud);font-size:10px;font-weight:700;color:var(--sea-blue);position:absolute;top:9px;right:11px;opacity:.6;}
-.sc-tile .tile-label{font-family:var(--hud);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-bottom:3px;}
+.sc-tile .tile-label{font-family:var(--hud);font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--faint);text-transform:uppercase;margin-bottom:4px;}
 .sc-tile .tile-val{font-family:var(--cond);font-size:26px;font-weight:700;line-height:1;color:#fff;}
-.sc-tile .tile-sub{font-family:var(--hud);font-size:10px;font-weight:600;color:var(--sea-blue);letter-spacing:.05em;margin-top:2px;text-transform:uppercase;}
+.sc-tile .tile-sub{font-family:var(--hud);font-size:15px;font-weight:700;color:var(--sea-blue);letter-spacing:.01em;margin-top:4px;text-transform:none;}
 .sc-tile.bonus-tile{background:linear-gradient(160deg,#23120a,#160a05);}
 .sc-tile.bonus-tile .tile-rank{color:var(--orange);}
 .sc-tile.bonus-tile .tile-val{color:var(--orange);text-shadow:0 0 18px rgba(255,96,14,0.35);}
@@ -127,6 +127,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .group-row .gname{font-size:12px;color:var(--muted);width:80px;flex-shrink:0;}
 .group-row input[type=range]{flex:1;accent-color:var(--sea-blue);}
 .group-row .gout{font-size:12px;font-weight:700;color:var(--sea-blue);min-width:64px;text-align:right;}
+.street-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.street-row:last-child{margin-bottom:0;}
+.street-label{flex:1;font-size:13px;color:var(--text);line-height:1.3;}
+.street-label small{display:block;font-size:11px;color:var(--faint);margin-top:1px;}
 
 .spinner-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;}
 .spinner-label{flex:1;font-size:13px;color:var(--text);}
@@ -222,6 +226,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('earn',this)">How You Get Paid</button>
+  <button class="tab-btn" onclick="switchTab('pace',this)">Pacing to Earn</button>
   <button class="tab-btn" onclick="switchTab('mindset',this)">Pro Mindset</button>
   <button class="tab-btn" onclick="switchTab('activity',this)">Activity</button>
 </div>
@@ -242,13 +247,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sc-hero-per" id="e_sub">12 cars · 33% VSC · 40 visits</div>
     </div>
     <div class="sc-grid">
-      <div class="sc-tile"><div class="tile-rank">01</div><div class="tile-label">Logged Visits</div><div class="tile-val" id="t_visits">$0</div><div class="tile-sub" id="ts_visits">0 × $25</div></div>
-      <div class="sc-tile"><div class="tile-rank">02</div><div class="tile-label">Vehicle Sales</div><div class="tile-val" id="t_units">$0</div><div class="tile-sub" id="ts_units">0 × $250</div></div>
-      <div class="sc-tile"><div class="tile-rank">03</div><div class="tile-label">VSC Sales</div><div class="tile-val" id="t_vsc">$0</div><div class="tile-sub" id="ts_vsc">0 × $100</div></div>
-      <div class="sc-tile"><div class="tile-rank">04</div><div class="tile-label">GAP Sales</div><div class="tile-val" id="t_gap">$0</div><div class="tile-sub" id="ts_gap">0 × $50</div></div>
-      <div class="sc-tile"><div class="tile-rank">05</div><div class="tile-label">Ancillary</div><div class="tile-val" id="t_anc">$0</div><div class="tile-sub" id="ts_anc">0 × $20</div></div>
-      <div class="sc-tile"><div class="tile-rank">06</div><div class="tile-label">Ziebart</div><div class="tile-val" id="t_zb">$0</div><div class="tile-sub" id="ts_zb">0 × $100</div></div>
-      <div class="sc-tile"><div class="tile-rank">07</div><div class="tile-label">Street Buys</div><div class="tile-val" id="t_street">$0</div><div class="tile-sub" id="ts_street">0 deals</div></div>
+      <div class="sc-tile"><div class="tile-rank">01</div><div class="tile-label">Logged Visits</div><div class="tile-val" id="t_visits">$0</div><div class="tile-sub" id="ts_visits">0 at $25 each</div></div>
+      <div class="sc-tile"><div class="tile-rank">02</div><div class="tile-label">Vehicle Sales</div><div class="tile-val" id="t_units">$0</div><div class="tile-sub" id="ts_units">0 at $250 each</div></div>
+      <div class="sc-tile"><div class="tile-rank">03</div><div class="tile-label">VSC Sales</div><div class="tile-val" id="t_vsc">$0</div><div class="tile-sub" id="ts_vsc">0 at $100 each</div></div>
+      <div class="sc-tile"><div class="tile-rank">04</div><div class="tile-label">GAP Sales</div><div class="tile-val" id="t_gap">$0</div><div class="tile-sub" id="ts_gap">0 at $50 each</div></div>
+      <div class="sc-tile"><div class="tile-rank">05</div><div class="tile-label">Ancillary</div><div class="tile-val" id="t_anc">$0</div><div class="tile-sub" id="ts_anc">0 at $20 each</div></div>
+      <div class="sc-tile"><div class="tile-rank">06</div><div class="tile-label">Ziebart</div><div class="tile-val" id="t_zb">$0</div><div class="tile-sub" id="ts_zb">0 at $100 each</div></div>
+      <div class="sc-tile"><div class="tile-rank">07</div><div class="tile-label">Street Buys</div><div class="tile-val" id="t_street">$0</div><div class="tile-sub" id="ts_street">0 purchases</div></div>
       <div class="sc-tile bonus-tile locked" id="bonus_tile"><div class="tile-rank">08</div><div class="tile-label">Qtr Bonus</div><div class="tile-val" id="t_qbonus">$0</div><div class="tile-sub" id="ts_qbonus">Locked</div></div>
     </div>
     <div class="sc-foot">
@@ -303,14 +308,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <!-- STEP 3 -->
   <div class="step"><div class="step-num">3</div><div class="step-title">Street purchases</div></div>
-  <div class="step-sub">Buy at the AccuTrade number and earn <strong style="color:var(--sea-blue)">$200</strong>. Pay above AccuTrade and it is <strong style="color:var(--orange)">$100</strong>.</div>
-  <div class="spinner-row">
-    <div class="spinner-label">At AccuTrade or below<small>$200 each</small></div>
-    <div class="spinner-controls"><button class="spin-btn" onclick="spin('street200',-1)">&minus;</button><div class="spin-val" id="v_street200">0</div><button class="spin-btn" onclick="spin('street200',1)">+</button></div>
-  </div>
-  <div class="spinner-row">
-    <div class="spinner-label">Above AccuTrade<small>$100 each</small></div>
-    <div class="spinner-controls"><button class="spin-btn" onclick="spin('street100',-1)">&minus;</button><div class="spin-val" id="v_street100">0</div><button class="spin-btn" onclick="spin('street100',1)">+</button></div>
+  <div class="step-sub">Buy at the AccuTrade Instant Offer number and earn <strong style="color:var(--sea-blue)">$200</strong>. Pay above it and it is <strong style="color:var(--orange)">$100</strong>.</div>
+  <div class="group-wrap">
+    <div class="group-title">Street Buys</div>
+    <div class="street-row">
+      <div class="street-label">Street Buys at Accutrade Instant Offer<small>$200 each</small></div>
+      <div class="spinner-controls"><button class="spin-btn" onclick="spin('street200',-1)">&minus;</button><div class="spin-val" id="v_street200">0</div><button class="spin-btn" onclick="spin('street200',1)">+</button></div>
+    </div>
+    <div class="street-row">
+      <div class="street-label">Street Buys Above Accutrade Instant Offer<small>$100 each</small></div>
+      <div class="spinner-controls"><button class="spin-btn" onclick="spin('street100',-1)">&minus;</button><div class="spin-val" id="v_street100">0</div><button class="spin-btn" onclick="spin('street100',1)">+</button></div>
+    </div>
   </div>
 
   <!-- STEP 4 -->
@@ -320,6 +328,109 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="motivator" id="motivator_box" style="display:none;">
     <div class="motivator-head" id="motivator_head"></div>
     <div class="motivator-body" id="motivator_body"></div>
+  </div>
+</div>
+
+<!-- ===== PACING TO EARN ===== -->
+<div id="tab-pace" class="tab-pane">
+
+  <div class="scorecard">
+    <div class="sc-header">
+      <div class="sc-tag">On <span>Pace</span> For</div>
+      <div class="sc-badge" id="p_badge">Day 1 of 30</div>
+    </div>
+    <div class="sc-hero">
+      <div class="sc-hero-label">Projected Month at This Pace</div>
+      <div class="sc-hero-amount"><span class="dollar">$</span><span id="p_total">0</span></div>
+      <div class="sc-hero-per" id="p_sub">Earned so far: $0 · enter your month-to-date below</div>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-tile"><div class="tile-rank">01</div><div class="tile-label">Logged Visits</div><div class="tile-val" id="pt_visits">$0</div><div class="tile-sub" id="pts_visits">0 projected</div></div>
+      <div class="sc-tile"><div class="tile-rank">02</div><div class="tile-label">Vehicle Sales</div><div class="tile-val" id="pt_units">$0</div><div class="tile-sub" id="pts_units">0 projected</div></div>
+      <div class="sc-tile"><div class="tile-rank">03</div><div class="tile-label">VSC Sales</div><div class="tile-val" id="pt_vsc">$0</div><div class="tile-sub" id="pts_vsc">0 projected</div></div>
+      <div class="sc-tile"><div class="tile-rank">04</div><div class="tile-label">GAP Sales</div><div class="tile-val" id="pt_gap">$0</div><div class="tile-sub" id="pts_gap">0 projected</div></div>
+      <div class="sc-tile"><div class="tile-rank">05</div><div class="tile-label">Ancillary</div><div class="tile-val" id="pt_anc">$0</div><div class="tile-sub" id="pts_anc">0 projected</div></div>
+      <div class="sc-tile"><div class="tile-rank">06</div><div class="tile-label">Ziebart</div><div class="tile-val" id="pt_zb">$0</div><div class="tile-sub" id="pts_zb">0 projected</div></div>
+      <div class="sc-tile"><div class="tile-rank">07</div><div class="tile-label">Street Buys</div><div class="tile-val" id="pt_street">$0</div><div class="tile-sub" id="pts_street">0 projected</div></div>
+      <div class="sc-tile bonus-tile locked" id="p_bonus_tile"><div class="tile-rank">08</div><div class="tile-label">Qtr Bonus</div><div class="tile-val" id="pt_qbonus">$0</div><div class="tile-sub" id="pts_qbonus">Locked</div></div>
+    </div>
+    <div class="sc-foot">
+      <div class="sc-foot-item"><div class="sc-foot-label">Earned So Far</div><div class="sc-foot-val blue" id="pf_earned">$0</div></div>
+      <div class="sc-foot-item"><div class="sc-foot-label">Projected Month</div><div class="sc-foot-val" id="pf_month">$0</div></div>
+      <div class="sc-foot-item"><div class="sc-foot-label">Days Left</div><div class="sc-foot-val orange" id="pf_daysleft">0</div></div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted);line-height:1.6;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 13px;margin-bottom:6px;">
+    Enter what you have done <strong style="color:var(--sea-blue)">so far this month</strong>. The scorecard projects where you will finish if you hold this pace — and what your quarterly bonus is tracking toward.
+  </p>
+
+  <!-- WHERE ARE YOU IN THE MONTH -->
+  <div class="step"><div class="step-num">1</div><div class="step-title">Where are you in the month?</div></div>
+  <div class="step-sub">Slide to the day you are on. This tells the tool how much of the month is left to project.</div>
+  <div class="sl-row sales-row">
+    <div class="sl-top"><div class="sl-name">Day of the month <small>how far in you are</small></div><div class="sl-out"><span class="big" id="po_day">1</span><span class="sub" id="po_daysleft">29 days left</span></div></div>
+    <input type="range" id="p_day" min="1" max="31" value="1" step="1" oninput="paceCalc()">
+    <div class="flag blue" id="p_day_flag">Pace multiplier: ×30.0</div>
+  </div>
+
+  <!-- MTD INPUTS -->
+  <div class="step"><div class="step-num">2</div><div class="step-title">Your month-to-date numbers</div></div>
+  <div class="step-sub">Enter the actual count you have done so far this month.</div>
+  <div class="sl-row">
+    <div class="sl-top"><div class="sl-name">Visits logged so far <small>$25 each</small></div><div class="sl-out"><span class="big" id="po_visits_n">0</span><span class="sub" id="po_visits_p">$0</span></div></div>
+    <input type="range" id="p_visits" min="0" max="150" value="0" step="1" oninput="paceCalc()">
+  </div>
+  <div class="sl-row">
+    <div class="sl-top"><div class="sl-name">Vehicles sold so far <small>$250 each</small></div><div class="sl-out"><span class="big" id="po_units_n">0</span><span class="sub" id="po_units_p">$0</span></div></div>
+    <input type="range" id="p_units" min="0" max="40" value="0" step="1" oninput="paceCalc()">
+    <div class="flag good" id="p_close_flag">Log visits and sales to see your closing percentage.</div>
+  </div>
+  <div class="sl-row">
+    <div class="sl-top"><div class="sl-name">VSC sold so far <small>$100 each</small></div><div class="sl-out"><span class="big" id="po_vsc_n">0</span><span class="sub" id="po_vsc_p">$0</span></div></div>
+    <input type="range" id="p_vsc" min="0" max="40" value="0" step="1" oninput="paceCalc()">
+    <div class="flag blue" id="p_vsc_flag">0% penetration</div>
+  </div>
+  <div class="sl-row">
+    <div class="sl-top"><div class="sl-name">GAP sold so far <small>$50 each</small></div><div class="sl-out"><span class="big" id="po_gap_n">0</span><span class="sub" id="po_gap_p">$0</span></div></div>
+    <input type="range" id="p_gap" min="0" max="40" value="0" step="1" oninput="paceCalc()">
+    <div class="flag blue" id="p_gap_flag">0% penetration</div>
+  </div>
+  <div class="sl-row">
+    <div class="sl-top"><div class="sl-name">Ziebart sold so far <small>$100 each</small></div><div class="sl-out"><span class="big" id="po_zb_n">0</span><span class="sub" id="po_zb_p">$0</span></div></div>
+    <input type="range" id="p_zb" min="0" max="40" value="0" step="1" oninput="paceCalc()">
+    <div class="flag blue" id="p_zb_flag">0% penetration</div>
+  </div>
+  <div class="group-wrap">
+    <div class="group-title">Ancillary products so far — $20 each</div>
+    <div class="group-row"><span class="gname">Key</span><input type="range" id="p_anc_key" min="0" max="40" value="0" step="1" oninput="paceCalc()"><span class="gout" id="po_key">0 · 0%</span></div>
+    <div class="group-row"><span class="gname">Dent</span><input type="range" id="p_anc_dent" min="0" max="40" value="0" step="1" oninput="paceCalc()"><span class="gout" id="po_dent">0 · 0%</span></div>
+    <div class="group-row"><span class="gname">Windshield</span><input type="range" id="p_anc_wind" min="0" max="40" value="0" step="1" oninput="paceCalc()"><span class="gout" id="po_wind">0 · 0%</span></div>
+    <div class="group-row"><span class="gname">Tire/Wheel</span><input type="range" id="p_anc_tire" min="0" max="40" value="0" step="1" oninput="paceCalc()"><span class="gout" id="po_tire">0 · 0%</span></div>
+  </div>
+
+  <!-- STREET — SECTION 3 -->
+  <div class="step"><div class="step-num">3</div><div class="step-title">Street purchases so far</div></div>
+  <div class="step-sub">Buy at the AccuTrade Instant Offer number and earn <strong style="color:var(--sea-blue)">$200</strong>. Pay above it and it is <strong style="color:var(--orange)">$100</strong>.</div>
+  <div class="group-wrap">
+    <div class="group-title">Street Buys So Far</div>
+    <div class="street-row">
+      <div class="street-label">Street Buys at Accutrade Instant Offer<small>$200 each</small></div>
+      <div class="spinner-controls"><button class="spin-btn" onclick="spinP('street200',-1)">&minus;</button><div class="spin-val" id="pv_street200">0</div><button class="spin-btn" onclick="spinP('street200',1)">+</button></div>
+    </div>
+    <div class="street-row">
+      <div class="street-label">Street Buys Above Accutrade Instant Offer<small>$100 each</small></div>
+      <div class="spinner-controls"><button class="spin-btn" onclick="spinP('street100',-1)">&minus;</button><div class="spin-val" id="pv_street100">0</div><button class="spin-btn" onclick="spinP('street100',1)">+</button></div>
+    </div>
+  </div>
+
+  <!-- PROJECTED QUARTERLY BONUS -->
+  <div class="step" style="margin-top:22px;"><div class="step-num" style="background:var(--orange);">4</div><div class="step-title">Quarterly bonus — on this pace</div></div>
+  <div class="step-sub">If you hold this monthly pace across the quarter, here is where your bonus lands:</div>
+  <div id="p_tier_cards"></div>
+  <div class="motivator" id="p_motivator_box" style="display:none;">
+    <div class="motivator-head" id="p_motivator_head"></div>
+    <div class="motivator-body" id="p_motivator_body"></div>
   </div>
 </div>
 
@@ -490,13 +601,13 @@ function earnCalc(){
   /* SCORECARD */
   document.getElementById('e_total').textContent=Math.round(monthly).toLocaleString();
   document.getElementById('e_sub').textContent=units+' cars \u00B7 '+vscPct+'% VSC \u00B7 '+visits+' visits';
-  setTile('visits',visitPay,visits+' \u00D7 $25');
-  setTile('units',unitPay,units+' \u00D7 $250');
-  setTile('vsc',vscPay,vsc+' \u00D7 $100');
-  setTile('gap',gapPay,gap+' \u00D7 $50');
-  setTile('anc',ancPay,ancCount+' \u00D7 $20');
-  setTile('zb',zbPay,zb+' \u00D7 $100');
-  setTile('street',streetPay,(s200+s100)+' deal'+((s200+s100)!==1?'s':''));
+  setTile('visits',visitPay,visits+' at $25 each');
+  setTile('units',unitPay,units+' at $250 each');
+  setTile('vsc',vscPay,vsc+' at $100 each');
+  setTile('gap',gapPay,gap+' at $50 each');
+  setTile('anc',ancPay,ancCount+' at $20 each');
+  setTile('zb',zbPay,zb+' at $100 each');
+  setTile('street',streetPay,(s200+s100)+' purchase'+((s200+s100)!==1?'s':''));
 
   /* quarterly */
   var qUnits=units*3,qVscPct=vscPct;
@@ -585,7 +696,161 @@ function sim(){
   document.getElementById('sim_bridge').innerHTML='<strong>Paycheck impact:</strong> '+tot+' logged visits \u2192 '+u+' units \u2192 '+fmt(u*250)+' in unit pay. Tier 1 triggers at 9 units/month \u2014 '+Math.max(0,9-u)+' to go.';
   document.getElementById('sim_nudge').textContent='Repeat/referral calls ('+warm+'/day) generate '+p+'% of your appointments at about 5x the close rate of cold calls. Every customer you log compounds over time.';
 }
-function initAll(){earnCalc();sim();}
+var pstreet={street200:0,street100:0};
+function spinP(field,delta){pstreet[field]=Math.max(0,pstreet[field]+delta);document.getElementById('pv_'+field).textContent=pstreet[field];paceCalc();}
+
+function enforcePaceCaps(){
+  var visits=gv('p_visits');
+  var uEl=document.getElementById('p_units');
+  uEl.max=visits; if(+uEl.value>visits)uEl.value=visits;
+  var units=+uEl.value;
+  var ids=['p_vsc','p_gap','p_zb','p_anc_key','p_anc_dent','p_anc_wind','p_anc_tire'];
+  for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);el.max=units;if(+el.value>units)el.value=units;}
+}
+
+function paceCalc(){
+  enforcePaceCaps();
+  var now=new Date();
+  var dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  var dayEl=document.getElementById('p_day');
+  dayEl.max=dim; if(+dayEl.value>dim)dayEl.value=dim;
+  var day=gv('p_day');
+  var pace=day>0?dim/day:0;
+  var daysLeft=Math.max(0,dim-day);
+
+  /* MTD actuals */
+  var mVisits=gv('p_visits'),mUnits=gv('p_units'),mVsc=gv('p_vsc'),mGap=gv('p_gap'),mZb=gv('p_zb');
+  var mKey=gv('p_anc_key'),mDent=gv('p_anc_dent'),mWind=gv('p_anc_wind'),mTire=gv('p_anc_tire');
+  var mAnc=mKey+mDent+mWind+mTire;
+  var ms200=pstreet.street200,ms100=pstreet.street100;
+
+  /* earned so far */
+  var earnedMTD=mVisits*25+mUnits*250+mVsc*100+mGap*50+mZb*100+mAnc*20+ms200*200+ms100*100;
+
+  /* projected full month (round) */
+  function pr(n){return Math.round(n*pace);}
+  var pVisits=pr(mVisits),pUnits=pr(mUnits),pVsc=pr(mVsc),pGap=pr(mGap),pZb=pr(mZb);
+  var pKey=pr(mKey),pDent=pr(mDent),pWind=pr(mWind),pTire=pr(mTire),pAnc=pKey+pDent+pWind+pTire;
+  var ps200=pr(ms200),ps100=pr(ms100);
+
+  var visitPay=pVisits*25,unitPay=pUnits*250,vscPay=pVsc*100,gapPay=pGap*50,zbPay=pZb*100,ancPay=pAnc*20,streetPay=ps200*200+ps100*100;
+  var projMonth=visitPay+unitPay+vscPay+gapPay+zbPay+ancPay+streetPay;
+
+  var closePct=pct(mUnits,mVisits),vscPct=pct(mVsc,mUnits),gapPct=pct(mGap,mUnits),zbPct=pct(mZb,mUnits);
+
+  /* day controls */
+  document.getElementById('po_day').textContent=day;
+  document.getElementById('po_daysleft').textContent=daysLeft+' day'+(daysLeft!==1?'s':'')+' left';
+  document.getElementById('p_day_flag').innerHTML='Pace multiplier: \u00D7'+pace.toFixed(1)+' \u2014 day '+day+' of '+dim+', '+daysLeft+' to go.';
+  document.getElementById('p_badge').textContent='Day '+day+' of '+dim;
+
+  /* MTD slider readouts */
+  document.getElementById('po_visits_n').textContent=mVisits;
+  document.getElementById('po_visits_p').textContent=fmt(mVisits*25);
+  document.getElementById('po_units_n').textContent=mUnits;
+  document.getElementById('po_units_p').textContent=fmt(mUnits*250);
+  document.getElementById('po_vsc_n').textContent=mVsc;
+  document.getElementById('po_vsc_p').textContent=fmt(mVsc*100);
+  document.getElementById('po_gap_n').textContent=mGap;
+  document.getElementById('po_gap_p').textContent=fmt(mGap*50);
+  document.getElementById('po_zb_n').textContent=mZb;
+  document.getElementById('po_zb_p').textContent=fmt(mZb*100);
+  document.getElementById('po_key').textContent=mKey+' \u00B7 '+pct(mKey,mUnits)+'%';
+  document.getElementById('po_dent').textContent=mDent+' \u00B7 '+pct(mDent,mUnits)+'%';
+  document.getElementById('po_wind').textContent=mWind+' \u00B7 '+pct(mWind,mUnits)+'%';
+  document.getElementById('po_tire').textContent=mTire+' \u00B7 '+pct(mTire,mUnits)+'%';
+
+  /* closing flag */
+  var cf=document.getElementById('p_close_flag');
+  if(mVisits===0){cf.className='flag blue';cf.innerHTML='Log visits and sales to see your closing percentage.';}
+  else if(closePct<25){cf.className='flag low';cf.innerHTML=closePct+'% closing \u2014 below our healthy range. Make sure every visit is being logged and worked.';}
+  else if(closePct>40){cf.className='flag high';cf.innerHTML=closePct+'% closing \u2014 above our healthy range. Usually means not every visit is being logged.';}
+  else{cf.className='flag good';cf.innerHTML=closePct+'% closing \u2014 healthy range, 25% to 40%.';}
+
+  setPen('p_vsc_flag',vscPct,true);
+  setPen('p_gap_flag',gapPct,false);
+  setPen('p_zb_flag',zbPct,false);
+
+  /* scorecard (projected) */
+  document.getElementById('p_total').textContent=Math.round(projMonth).toLocaleString();
+  document.getElementById('p_sub').textContent='Earned so far: '+fmt(earnedMTD)+' \u00B7 day '+day+' of '+dim;
+  pSetTile('visits',visitPay,pVisits+' projected');
+  pSetTile('units',unitPay,pUnits+' projected');
+  pSetTile('vsc',vscPay,pVsc+' projected');
+  pSetTile('gap',gapPay,pGap+' projected');
+  pSetTile('anc',ancPay,pAnc+' projected');
+  pSetTile('zb',zbPay,pZb+' projected');
+  pSetTile('street',streetPay,(ps200+ps100)+' projected');
+
+  /* quarterly on projected pace */
+  var qUnits=pUnits*3,qVscPct=vscPct;
+  var earned=null;
+  for(var t=0;t<TIERS.length;t++){if(qUnits>=TIERS[t].qUnitMin&&qVscPct>=TIERS[t].vscMin)earned=TIERS[t];}
+  var qualifies=(pUnits>=9&&qVscPct>=30);
+  if(!qualifies)earned=null;
+  var qBonus=earned?earned.bonus*qUnits:0;
+
+  var bt=document.getElementById('p_bonus_tile');
+  document.getElementById('pt_qbonus').textContent=earned?fmt(qBonus):'$0';
+  if(earned){bt.classList.remove('locked');document.getElementById('pts_qbonus').textContent=earned.name+' / qtr';}
+  else{bt.classList.add('locked');document.getElementById('pts_qbonus').textContent='Locked';}
+
+  /* foot */
+  document.getElementById('pf_earned').textContent=fmt(earnedMTD);
+  document.getElementById('pf_month').textContent=fmt(projMonth);
+  document.getElementById('pf_daysleft').textContent=daysLeft;
+
+  /* tier cards */
+  var th='';
+  for(var k=0;k<TIERS.length;k++){
+    var tr=TIERS[k],um=qUnits>=tr.qUnitMin,vm=qVscPct>=tr.vscMin,isE=qualifies&&um&&vm,cls=isE?'earned':'locked';
+    var ul=Math.max(0,tr.qUnitMin-qUnits),vl=Math.max(0,tr.vscMin-qVscPct),upct=Math.min(100,Math.round((qUnits/tr.qUnitMin)*100));
+    th+='<div class="tier-card '+cls+'"><div class="tier-top"><div class="tier-name">'+tr.name+': '+tr.qUnitMin+'+ units + '+tr.vscMin+'%+ VSC</div><div class="tier-payout">'+fmt(tr.bonus)+'/unit</div></div>';
+    if(isE){th+='<div class="tier-desc">On pace \u2014 <strong>'+fmt(tr.bonus*qUnits)+'</strong> projected on all '+qUnits+' units this quarter</div>';}
+    else{
+      var parts=[];
+      if(ul>0)parts.push(ul+' more projected unit'+(ul!==1?'s':''));
+      if(vl>0)parts.push('VSC '+vl+'% short');
+      th+='<div class="tier-desc">'+(parts.length?parts.join(' \u00B7 '):'Keep this pace up')+'</div>';
+      if(ul>0)th+='<div class="progress-wrap"><div class="progress-fill" style="width:'+upct+'%"></div></div><div class="progress-label">'+qUnits+' of '+tr.qUnitMin+' projected units ('+upct+'%)</div>';
+    }
+    th+='</div>';
+  }
+  document.getElementById('p_tier_cards').innerHTML=th;
+
+  /* motivator */
+  var box=document.getElementById('p_motivator_box'),hh='',mm='';
+  if(mVisits===0&&mUnits===0){
+    hh='Enter your month-to-date to see your pace';
+    mm='Slide in what you have sold so far this month and the scorecard projects your finish.';
+  }else if(earned===TIERS[2]){
+    hh='On pace for Tier 3 \u2014 the top';
+    mm='Hold this pace and you finish the quarter at <strong>'+fmt(TIERS[2].bonus*qUnits)+'</strong> in bonus alone. Keep logging every visit and protect that VSC.';
+  }else if(earned===TIERS[1]){
+    var u2=Math.max(0,TIERS[2].qUnitMin-qUnits),v2=Math.max(0,TIERS[2].vscMin-qVscPct);
+    hh='On pace for Tier 2';
+    mm='Projected <strong>'+fmt(TIERS[1].bonus*qUnits)+'</strong> in quarterly bonus. '+need(u2,v2)+' lifts you to Tier 3.';
+  }else if(earned===TIERS[0]){
+    var u1=Math.max(0,TIERS[1].qUnitMin-qUnits),v1=Math.max(0,TIERS[1].vscMin-qVscPct);
+    hh='On pace for Tier 1';
+    mm='Projected <strong>'+fmt(TIERS[0].bonus*qUnits)+'</strong> in quarterly bonus. '+need(u1,v1)+' unlocks Tier 2.';
+  }else{
+    var uN=Math.max(0,27-qUnits),vN=Math.max(0,30-qVscPct);
+    hh='Not yet on pace for a bonus';
+    mm='At this pace you finish short of Tier 1. '+need(uN,vN)+' over the quarter gets you there. With '+daysLeft+' days left this month, there is still time to move it.';
+  }
+  document.getElementById('p_motivator_head').innerHTML=hh;
+  document.getElementById('p_motivator_body').innerHTML=mm;
+  box.style.display='block';
+}
+function pSetTile(key,val,sub){document.getElementById('pt_'+key).textContent=fmt(val);document.getElementById('pts_'+key).textContent=sub;}
+
+function initAll(){earnCalc();paceCalc();sim();initPaceDefaults();}
+function initPaceDefaults(){
+  var now=new Date();
+  var dayEl=document.getElementById('p_day');
+  if(dayEl){dayEl.value=now.getDate();paceCalc();}
+}
 </script>
 </body>
 </html>
