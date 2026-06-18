@@ -1,5 +1,4 @@
-[salesprofinal.html](https://github.com/user-attachments/files/29101872/salesprofinal.html)
-# svg-tools<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
